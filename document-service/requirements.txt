@@ -1,0 +1,10 @@
+# StockFlow Document Service — Python Dependencies
+# Zero-blue enterprise document engine (PDF, Word .docx, Excel .xlsx, PowerPoint .pptx)
+python-docx>=1.1.0
+openpyxl>=3.1.2
+python-pptx>=0.6.23
+reportlab>=4.1.0
+Pillow>=10.0.0
+lxml>=5.0.0
+pypdf>=4.0.0
+pymupdf>=1.24.0

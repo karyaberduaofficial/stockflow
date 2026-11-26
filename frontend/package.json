@@ -1,0 +1,36 @@
+{
+  "name": "stockflow-frontend",
+  "private": true,
+  "version": "2.0.0",
+  "type": "module",
+  "description": "StockFlow v2.0 — Integrated Inventory, Warehouse, Procurement, Sales, Accounting, Tax & HR Payroll ERP for Household Furniture & Homeware Retail",
+  "scripts": {
+    "dev": "vite --port 5173",
+    "build": "tsc && vite build",
+    "preview": "vite preview --port 4173",
+    "lint:no-blue": "node -e \"const fs=require('fs'),path=require('path');const bad=/(?<![a-z])(blue-|sky-|cyan-|indigo-|slate-|#0000ff|#3b82f6|#2563eb|#1d4ed8|#0ea5e9|#06b6d4|#6366f1|#0f172a|#1e293b)/i;let fails=[];function walk(d){for(const f of fs.readdirSync(d)){const p=path.join(d,f);if(fs.statSync(p).isDirectory())walk(p);else if(/\\.(tsx?|css|html|svg)$/.test(f)){const t=fs.readFileSync(p,'utf8');if(bad.test(t))fails.push(p+': '+t.match(bad)[0]);}}}walk('src');walk('public');if(fails.length){console.error('FORBIDDEN BLUE FOUND:\\n'+fails.join('\\n'));process.exit(1);}console.log('ZERO-BLUE AUDIT PASSED 100%');\""
+  },
+  "dependencies": {
+    "axios": "^1.7.9",
+    "chart.js": "^4.4.7",
+    "docx": "^9.1.0",
+    "jspdf": "^4.2.1",
+    "jspdf-autotable": "^5.0.9",
+    "lucide-react": "^0.469.0",
+    "react": "^18.3.1",
+    "react-chartjs-2": "^5.3.0",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.28.1",
+    "write-excel-file": "^4.1.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.5",
+    "@vitejs/plugin-react": "^6.3.0",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5.7.2",
+    "vite": "^8.3.8"
+  }
+}

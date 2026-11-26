@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 160" width="640" height="160" role="img" aria-label="StockFlow Dark Sidebar Logo">
+  <title>StockFlow by Karya Berdua (Dark Mode)</title>
+  <g transform="translate(16, 16) scale(0.64)">
+    <!-- Upper-Left Interlocking Furniture/Warehouse Timber Bracket -->
+    <path d="M 38,24 H 106 V 54 H 60 Q 54,54 54,60 V 112 H 24 V 38 Q 24,24 38,24 Z" fill="#FAF8F5" />
+    <!-- Lower-Right Symmetric Interlocking Timber Bracket -->
+    <path d="M 162,176 H 94 V 146 H 140 Q 146,146 146,140 V 88 H 176 V 162 Q 176,176 162,176 Z" fill="#FAF8F5" />
+    <!-- Origin Stock / Ledger Unit Cube -->
+    <rect x="24" y="126" width="50" height="50" rx="10" fill="#EAB34B" />
+    <!-- Diagonal Kinetic StockFlow Arrow -->
+    <path d="M 120,24 H 166 Q 176,24 176,34 V 80 H 150 V 68 L 92,126 L 74,108 L 132,50 H 120 Z" fill="#E87A4A" />
+  </g>
+  <rect x="164" y="34" width="2.5" height="92" rx="1.25" fill="#EAB34B" opacity="0.7" />
+  <text x="188" y="88" font-family="'Plus Jakarta Sans', 'Inter', 'Segoe UI', Arial, sans-serif" font-weight="800" font-size="56" letter-spacing="-0.8">
+    <tspan fill="#FAF8F5">Stock</tspan><tspan fill="#E87A4A">Flow</tspan>
+  </text>
+  <text x="190" y="118" font-family="'Inter', 'Segoe UI', Arial, sans-serif" font-weight="600" font-size="14" letter-spacing="3.2" fill="#D6CEC4">KARYA BERDUA · INVENTORY &amp; ERP</text>
+</svg>

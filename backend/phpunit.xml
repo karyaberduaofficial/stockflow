@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+         bootstrap="vendor/autoload.php"
+         colors="true"
+>
+    <testsuites>
+        <testsuite name="Unit">
+            <directory>tests/Unit</directory>
+        </testsuite>
+        <testsuite name="Feature">
+            <directory>tests/Feature</directory>
+        </testsuite>
+    </testsuites>
+    <source>
+        <include>
+            <directory>app</directory>
+        </include>
+    </source>
+    <php>
+        <env name="APP_NAME" value="StockFlow v2.0" force="true"/>
+        <env name="APP_ENV" value="testing" force="true"/>
+        <env name="APP_KEY" value="base64:U3RvY2tGbG93VGVzdGluZ0tleV9WMjAyNl9TZWN1cmU=" force="true"/>
+        <env name="APP_DEBUG" value="true" force="true"/>
+        <env name="APP_TIMEZONE" value="Asia/Jakarta" force="true"/>
+        <env name="FRONTEND_URL" value="http://localhost:5173" force="true"/>
+        <env name="BCRYPT_ROUNDS" value="4" force="true"/>
+        <env name="CACHE_STORE" value="array" force="true"/>
+        <env name="DB_CONNECTION" value="sqlite" force="true"/>
+        <env name="DB_DATABASE" value=":memory:" force="true"/>
+        <env name="MAIL_MAILER" value="array" force="true"/>
+        <env name="QUEUE_CONNECTION" value="sync" force="true"/>
+        <env name="SESSION_DRIVER" value="array" force="true"/>
+        <env name="GOOGLE_CLIENT_ID" value="test-google-client-id.apps.googleusercontent.com" force="true"/>
+        <env name="GOOGLE_CLIENT_SECRET" value="test-google-client-secret" force="true"/>
+        <env name="GOOGLE_REDIRECT_URI" value="http://localhost:8000/api/auth/google/callback" force="true"/>
+        <env name="DOCUMENT_SERVICE_PYTHON" value="python" force="true"/>
+        <env name="DOCUMENT_SERVICE_SCRIPT" value="../document-service/generate_export.py" force="true"/>
+    </php>
+</phpunit>

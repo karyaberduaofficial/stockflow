@@ -1,0 +1,32 @@
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+
+export default defineConfig({
+  plugins: [react()],
+  server: {
+    port: 5173,
+    strictPort: false,
+    proxy: {
+      '/api': {
+        target: process.env.VITE_API_PROXY_TARGET || 'http://127.0.0.1:8000',
+        changeOrigin: true,
+        secure: false,
+      },
+    },
+  },
+  build: {
+    sourcemap: false,
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            if (id.includes('chart.js') || id.includes('react-chartjs-2')) return 'charts';
+            if (id.includes('jspdf') || id.includes('write-excel-file') || id.includes('docx')) return 'exports';
+            if (id.includes('react-dom') || id.includes('react-router') || id.includes('axios')) return 'vendor';
+          }
+          return undefined;
+        },
+      },
+    },
+  },
+});

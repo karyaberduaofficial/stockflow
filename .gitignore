@@ -1,0 +1,75 @@
+# ==============================================================================
+# StockFlow — Strict Public Repository .gitignore
+# Excludes all secrets, credentials, .env files, internal docs, markdown notes,
+# security blueprints, workflows, and build/dependency caches from GitHub.
+# ==============================================================================
+
+# 1. All Environment, Credential & Secret Files (including examples)
+.env
+.env.*
+**/.env
+**/.env.*
+*.key
+*.pem
+*.p12
+*.pfx
+*.jks
+*.crt
+*secret*
+*credentials*
+*credential*
+google-services.json
+service-account*.json
+client_secret*.json
+
+# 2. All Markdown Files EXCEPT Root README.md
+*.md
+**/*.md
+!/README.md
+
+# 3. Internal Security, Workflows, Documentation & Design Automation Folders
+security/
+.github/
+docs/
+figma-plugin/
+brand-assets/release/
+brand-assets/project/
+exports/AUDIT_REPORT.json
+
+# 4. Dependencies, Build Outputs & Runtime Caches
+node_modules/
+frontend/dist/
+frontend/.vite/
+backend/vendor/
+backend/public/hot
+backend/public/storage
+backend/storage/*.key
+backend/storage/logs/*
+!backend/storage/logs/.gitkeep
+backend/storage/framework/cache/*
+backend/storage/framework/sessions/*
+backend/storage/framework/views/*
+backend/storage/app/exports/*
+backend/storage/app/tmp/*
+backend/bootstrap/cache/*.php
+.phpunit.result.cache
+backend/.phpunit.result.cache
+
+# 5. Databases, Dumps & Temporary Artifacts
+*.sqlite
+*.sqlite3
+*.sql
+*.dump
+*.bak
+*.log
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+
+# 6. OS & IDE Files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

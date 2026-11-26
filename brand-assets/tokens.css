@@ -1,0 +1,424 @@
+/* ==========================================================================
+   StockFlow Design System Tokens — Karya Berdua
+   Furniture & Homeware Craft + Enterprise Financial Precision
+   Zero-Blue Compliant | WCAG 2.2 AA/AAA Verified | Layered Surfaces & Motion
+   ========================================================================== */
+
+:root {
+  /* 1. Brand Signature Palette (Deep Forest Pine, Warm Terracotta, Harvest Ochre) */
+  --sf-primary: #1B4332;
+  --sf-primary-hover: #133124;
+  --sf-primary-active: #0D241A;
+  --sf-primary-tint: #E8F3EC;
+  --sf-on-primary: #FFFFFF;
+
+  --sf-secondary: #C2592B;
+  --sf-secondary-hover: #A3461F;
+  --sf-secondary-active: #8A3818;
+  --sf-secondary-tint: #FDF0E9;
+  --sf-secondary-text: #9A3F19;
+  --sf-on-secondary: #FFFFFF;
+
+  --sf-tertiary: #B47B1B;
+  --sf-tertiary-hover: #966514;
+  --sf-tertiary-tint: #FEF7E6;
+  --sf-tertiary-text: #7C510C;
+  --sf-on-tertiary: #FFFFFF;
+
+  /* 2. Warm Alabaster Canvas & Structural Neutrals */
+  --sf-canvas: #FAF8F5;
+  --sf-canvas-secondary: #F3EFE9;
+  --sf-surface: #FFFFFF;
+  --sf-surface-muted: #F7F4EF;
+  --sf-border: #E5DED5;
+  --sf-border-strong: #A89F94;
+
+  --sf-text-primary: #1C1917;
+  --sf-text-secondary: #57534E;
+  --sf-text-muted: #78716C;
+
+  /* 3. Espresso Dark Sidebar Anchor */
+  --sf-sidebar-bg: #1C1917;
+  --sf-sidebar-surface: #292524;
+  --sf-sidebar-surface-hover: #332E2B;
+  --sf-sidebar-border: #3F3A36;
+  --sf-sidebar-text: #FAF8F5;
+  --sf-sidebar-text-secondary: #D6CEC4;
+  --sf-sidebar-text-muted: #A8A29E;
+  --sf-sidebar-accent-pine: #86BD7C;
+  --sf-sidebar-accent-terracotta: #E87A4A;
+  --sf-sidebar-accent-ochre: #EAB34B;
+
+  /* 4. Semantic Status Palette (Olive-Sage Info & Burgundy Accent — Strictly Zero-Blue) */
+  --sf-success: #15803D;
+  --sf-success-bg: #E8F7EE;
+  --sf-success-text: #14532D;
+  --sf-success-border: #A7DEC0;
+
+  --sf-warning: #B45309;
+  --sf-warning-bg: #FEF3C7;
+  --sf-warning-text: #78350F;
+  --sf-warning-border: #F2C97D;
+
+  --sf-danger: #B91C1C;
+  --sf-danger-bg: #FEE2E2;
+  --sf-danger-text: #7F1D1D;
+  --sf-danger-border: #F5B8B8;
+
+  --sf-info: #4D7C0F;
+  --sf-info-bg: #ECFCCB;
+  --sf-info-text: #365314;
+  --sf-info-border: #C5E08B;
+
+  --sf-burgundy: #7F1D4A;
+  --sf-burgundy-bg: #FCE7F3;
+  --sf-burgundy-text: #7F1D4A;
+  --sf-burgundy-border: #E7B4CE;
+
+  /* 5. Chart Series Palette (6 Distinct Accessible Non-Blue Tones) */
+  --sf-chart-1: #1B4332;
+  --sf-chart-2: #C2592B;
+  --sf-chart-3: #B47B1B;
+  --sf-chart-4: #4D7C0F;
+  --sf-chart-5: #7F1D4A;
+  --sf-chart-6: #57534E;
+
+  /* 6. Cross-Skill Alias Tokens (pro-web-architecture & ui-ux-multi-segmen parity) */
+  --bg-canvas: var(--sf-canvas);
+  --bg-surface: var(--sf-surface);
+  --bg-surface-subtle: var(--sf-canvas-secondary);
+  --text-primary: var(--sf-text-primary);
+  --text-secondary: var(--sf-text-secondary);
+  --border-subtle: var(--sf-border);
+  --border-strong: var(--sf-border-strong);
+  --brand-primary: var(--sf-primary);
+  --brand-primary-hover: var(--sf-primary-hover);
+  --brand-on-primary: var(--sf-on-primary);
+  --focus-ring-color: var(--sf-secondary);
+
+  /* 7. Typography */
+  --font-display: 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, sans-serif;
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --font-size-display: clamp(1.75rem, 1.4rem + 1.2vw, 2.25rem);
+  --font-size-h1: clamp(1.5rem, 1.25rem + 0.9vw, 1.875rem);
+  --font-size-h2: clamp(1.25rem, 1.1rem + 0.5vw, 1.5rem);
+  --font-size-h3: clamp(1.0625rem, 1rem + 0.25vw, 1.25rem);
+  --font-size-body: 0.875rem;
+  --font-size-table: 0.8125rem;
+  --font-size-caption: 0.75rem;
+  --line-height-heading: 1.3;
+  --line-height-body: 1.55;
+  --reading-max-ch: 72ch;
+
+  /* 8. Spacing, Layout & Shape */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+
+  --sf-sidebar-width: 256px;
+  --sf-sidebar-collapsed: 72px;
+  --sf-topbar-height: 64px;
+
+  --radius-xs: 4px;
+  --radius-control: 6px;
+  --radius-card: 8px;
+  --radius-modal: 12px;
+  --radius-pill: 9999px;
+
+  --touch-target-min: 44px;
+  --control-gap-min: 8px;
+
+  /* 9. Warm Espresso-Tinted Shadows */
+  --shadow-xs: 0 1px 2px rgba(28, 25, 23, 0.05);
+  --shadow-sm: 0 2px 6px -1px rgba(28, 25, 23, 0.07), 0 1px 3px rgba(28, 25, 23, 0.04);
+  --shadow-md: 0 8px 20px -6px rgba(28, 25, 23, 0.11), 0 2px 6px -2px rgba(28, 25, 23, 0.05);
+  --shadow-lg: 0 16px 36px -10px rgba(28, 25, 23, 0.16), 0 4px 12px -4px rgba(28, 25, 23, 0.06);
+
+  /* 10. Layered Ambient Backgrounds & Glassmorphism (3-Layer Craft Architecture) */
+  --bg-preset: "craft-executive-mesh-grid";
+  --bg-hero-mesh:
+    radial-gradient(circle at 12% 14%, rgba(27, 67, 50, 0.08) 0%, transparent 48%),
+    radial-gradient(circle at 86% 10%, rgba(194, 89, 43, 0.07) 0%, transparent 44%),
+    radial-gradient(circle at 52% 95%, rgba(180, 123, 27, 0.05) 0%, transparent 50%),
+    linear-gradient(180deg, #FFFFFF 0%, #FAF8F5 100%);
+  --bg-surface-pattern:
+    linear-gradient(to right, rgba(28, 25, 23, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(28, 25, 23, 0.04) 1px, transparent 1px);
+  --bg-surface-pattern-size: 24px 24px;
+  --bg-glass-surface: rgba(250, 248, 245, 0.88);
+  --bg-glass-border: rgba(229, 222, 213, 0.92);
+
+  /* 11. Motion & Micro-Interaction Curves (Corporate High-Precision) */
+  --motion-easing: cubic-bezier(0.16, 1, 0.3, 1);
+  --motion-fast: 120ms;
+  --motion-duration: 160ms;
+  --motion-drawer: 220ms;
+  --motion-reveal: 320ms;
+  --card-hover-transform: translateY(-2px);
+  --card-hover-shadow: var(--shadow-md);
+}
+
+/* Optional Full Dark Workspace Mode (Warm Espresso Charcoal) */
+[data-theme="dark"] {
+  --sf-canvas: #1C1917;
+  --sf-canvas-secondary: #231F1D;
+  --sf-surface: #292524;
+  --sf-surface-muted: #332E2B;
+  --sf-border: #3F3A36;
+  --sf-border-strong: #6B635D;
+
+  --sf-text-primary: #FAF8F5;
+  --sf-text-secondary: #D6CEC4;
+  --sf-text-muted: #A8A29E;
+
+  --sf-primary: #86BD7C;
+  --sf-primary-hover: #9FD096;
+  --sf-on-primary: #1C1917;
+  --sf-secondary: #E87A4A;
+  --sf-tertiary: #EAB34B;
+  --focus-ring-color: #EAB34B;
+
+  --sf-success-bg: #143522;
+  --sf-success-text: #BBF7D0;
+  --sf-warning-bg: #422709;
+  --sf-warning-text: #FDE68A;
+  --sf-danger-bg: #451414;
+  --sf-danger-text: #FECACA;
+  --sf-info-bg: #273A0E;
+  --sf-info-text: #D9F99D;
+
+  --bg-hero-mesh:
+    radial-gradient(circle at 12% 14%, rgba(134, 189, 124, 0.10) 0%, transparent 48%),
+    radial-gradient(circle at 86% 10%, rgba(232, 122, 74, 0.10) 0%, transparent 44%),
+    linear-gradient(180deg, #292524 0%, #1C1917 100%);
+  --bg-surface-pattern:
+    linear-gradient(to right, rgba(250, 248, 245, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(250, 248, 245, 0.04) 1px, transparent 1px);
+  --bg-glass-surface: rgba(28, 25, 23, 0.86);
+  --bg-glass-border: rgba(63, 58, 54, 0.90);
+}
+
+/* ==========================================================================
+   Base Typography & Tabular Numerals (Mandatory for ERP & Accounting)
+   ========================================================================== */
+
+body {
+  font-family: var(--font-sans);
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-body);
+  color: var(--sf-text-primary);
+  background-color: var(--sf-canvas);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, .sf-font-display {
+  font-family: var(--font-display);
+  line-height: var(--line-height-heading);
+  letter-spacing: -0.015em;
+}
+
+.sf-font-mono,
+.tabular-nums,
+[data-numeric="true"] {
+  font-variant-numeric: tabular-nums;
+}
+
+.sf-font-mono {
+  font-family: var(--font-mono);
+}
+
+/* ==========================================================================
+   3-Layer Atmospheric Backgrounds & Sticky Glass Header
+   ========================================================================== */
+
+.sf-bg-hero-mesh,
+.ui-bg-hero-mesh {
+  background-color: var(--sf-canvas);
+  background-image: var(--bg-hero-mesh);
+}
+
+.sf-bg-pattern,
+.ui-bg-pattern {
+  background-color: var(--sf-canvas);
+  background-image: var(--bg-hero-mesh), var(--bg-surface-pattern);
+  background-size: 100% 100%, var(--bg-surface-pattern-size);
+}
+
+.sf-glass-header,
+.ui-glass-header {
+  background-color: var(--bg-glass-surface);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--bg-glass-border);
+}
+
+/* ==========================================================================
+   Micro-Interactions, Staggered Reveals & 8-State Interactive Primitives
+   ========================================================================== */
+
+@keyframes sf-enter-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes sf-skeleton-shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.sf-animate-enter,
+.ui-animate-enter {
+  animation: sf-enter-fade-up var(--motion-reveal) var(--motion-easing) both;
+}
+
+.sf-stagger-1, .ui-stagger-1 { animation-delay: 45ms; }
+.sf-stagger-2, .ui-stagger-2 { animation-delay: 90ms; }
+.sf-stagger-3, .ui-stagger-3 { animation-delay: 135ms; }
+.sf-stagger-4, .ui-stagger-4 { animation-delay: 180ms; }
+
+/* Interactive Card (Default, Hover, Focus-Within, Active) */
+.sf-card-interactive,
+.ui-card-interactive {
+  background-color: var(--sf-surface);
+  border: 1px solid var(--sf-border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-xs);
+  transition:
+    transform var(--motion-duration) var(--motion-easing),
+    box-shadow var(--motion-duration) var(--motion-easing),
+    border-color var(--motion-duration) ease-out;
+}
+
+.sf-card-interactive:hover,
+.ui-card-interactive:hover,
+.sf-card-interactive:focus-within,
+.ui-card-interactive:focus-within {
+  transform: var(--card-hover-transform);
+  box-shadow: var(--card-hover-shadow);
+  border-color: var(--sf-border-strong);
+}
+
+/* Tactile Press & Disabled States */
+.sf-btn-tactile {
+  transition:
+    background-color var(--motion-fast) ease-out,
+    border-color var(--motion-fast) ease-out,
+    transform var(--motion-fast) var(--motion-easing),
+    box-shadow var(--motion-fast) ease-out;
+}
+
+.sf-btn-tactile:active:not(:disabled) {
+  transform: translateY(1px) scale(0.99);
+}
+
+.sf-btn-tactile:disabled,
+[aria-disabled="true"] {
+  opacity: 0.52;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Loading Skeleton (Zero CLS Shimmer) */
+.sf-skeleton {
+  border-radius: var(--radius-control);
+  background: linear-gradient(
+    90deg,
+    var(--sf-canvas-secondary) 25%,
+    #ECE5DC 50%,
+    var(--sf-canvas-secondary) 75%
+  );
+  background-size: 200% 100%;
+  animation: sf-skeleton-shimmer 1.4s ease-in-out infinite;
+}
+
+/* Universal Keyboard Focus-Visible Ring (WCAG 2.2 >= 3:1 Contrast) */
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 3px solid var(--focus-ring-color);
+  outline-offset: 2px;
+}
+
+/* ==========================================================================
+   Accessibility, Multi-Hardware (Smart Glasses / Watch / TV) & Print Guards
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    animation-delay: 0ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .sf-card-interactive:hover,
+  .ui-card-interactive:hover,
+  .sf-card-interactive:focus-within,
+  .ui-card-interactive:focus-within {
+    transform: none !important;
+  }
+}
+
+[data-motion="reduced"] *,
+[data-motion="reduced"] *::before,
+[data-motion="reduced"] *::after {
+  animation-duration: 0.01ms !important;
+  transition-duration: 0.01ms !important;
+}
+
+/* Warehouse Smart Glasses / AR Waveguide HUD Mode (True Optical Black) */
+[data-hardware="smart-glasses"] {
+  --sf-canvas: #000000 !important;
+  --sf-surface: #000000 !important;
+  --bg-canvas: #000000 !important;
+  --bg-surface: #000000 !important;
+  --bg-hero-mesh: none !important;
+  --bg-surface-pattern: none !important;
+  --sf-text-primary: #FFFFFF !important;
+  --text-primary: #FFFFFF !important;
+  --sf-border: #EAB34B !important;
+  font-size: 19px;
+}
+
+/* Clean Invoice, Ledger, Payslip & Report Printing */
+@media print {
+  .sf-bg-hero-mesh,
+  .ui-bg-hero-mesh,
+  .sf-bg-pattern,
+  .ui-bg-pattern,
+  .sf-glass-header,
+  .ui-glass-header,
+  body {
+    background-image: none !important;
+    background-color: #FFFFFF !important;
+    color: #000000 !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+  }
+
+  .sf-card-interactive,
+  .ui-card-interactive {
+    box-shadow: none !important;
+    border-color: #D6CEC4 !important;
+  }
+}

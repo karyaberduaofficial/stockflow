@@ -1,0 +1,125 @@
+{
+  "service": "stockflow-document-service",
+  "version": "2.0.0",
+  "brand_palette": {
+    "zero_blue_enforced": true,
+    "primary_forest_pine": "#1B4332",
+    "accent_terracotta": "#C2592B",
+    "tertiary_ochre": "#B47B1B",
+    "alabaster": "#FAF8F5",
+    "soft_sage": "#E8F3EC",
+    "espresso_charcoal": "#1C1917",
+    "muted_stone": "#57534E",
+    "semantic_success": "#15803D",
+    "semantic_warning": "#B45309",
+    "semantic_danger": "#B91C1C"
+  },
+  "cli": {
+    "entrypoint": "document-service/generate_export.py",
+    "invocation_template": "python document-service/generate_export.py --report {report} --format {format} --input {input_json_or_stdin} --output {output_path}",
+    "http_bridge": {
+      "script": "document-service/server.py",
+      "default_url": "http://127.0.0.1:8095",
+      "endpoints": {
+        "health": "GET /health",
+        "manifest": "GET /manifest",
+        "export": "POST /export"
+      }
+    }
+  },
+  "laravel_api_contract": {
+    "route": "GET /api/exports/{report}/{format}",
+    "query_params": ["period", "warehouse_id", "invoice_id", "employee_id"],
+    "response_headers": {
+      "Content-Disposition": "attachment; filename=\"StockFlow_{report}_{date}.{ext}\"",
+      "X-Content-Type-Options": "nosniff",
+      "Cache-Control": "no-store"
+    }
+  },
+  "mime_types": {
+    "pdf": "application/pdf",
+    "docx": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "xlsx": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "pptx": "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+  },
+  "reports": [
+    {
+      "id": "inventory",
+      "label": "Inventory Valuation & Reorder Report",
+      "formats": ["xlsx", "docx", "pdf"],
+      "allowed_roles": ["admin", "manager", "warehouse", "purchasing", "finance"],
+      "sample_files": {
+        "xlsx": "exports/excel/StockFlow_Inventory_Valuation_Report.xlsx",
+        "pdf": "exports/pdf/StockFlow_Inventory_Stock_Opname_Sheet.pdf"
+      }
+    },
+    {
+      "id": "opname",
+      "label": "Inventory Stock Opname Worksheet",
+      "formats": ["pdf", "xlsx", "docx"],
+      "allowed_roles": ["admin", "manager", "warehouse"],
+      "sample_files": {
+        "pdf": "exports/pdf/StockFlow_Inventory_Stock_Opname_Sheet.pdf"
+      }
+    },
+    {
+      "id": "financial",
+      "label": "Integrated Financial Statements (Trial Balance, P&L, Balance Sheet, Cash Flow)",
+      "formats": ["xlsx", "docx", "pdf", "pptx"],
+      "allowed_roles": ["admin", "manager", "finance"],
+      "sample_files": {
+        "xlsx": "exports/excel/StockFlow_Financial_Statements_2026.xlsx",
+        "docx": "exports/word/StockFlow_Management_Financial_Report.docx",
+        "pdf": "exports/pdf/StockFlow_Financial_Report_2026.pdf",
+        "pptx": "exports/powerpoint/StockFlow_Executive_Business_Review.pptx"
+      }
+    },
+    {
+      "id": "tax",
+      "label": "Indonesian Tax Recap (PPN DPP 11/12 & PPh 21 TER)",
+      "formats": ["xlsx", "docx", "pdf"],
+      "allowed_roles": ["admin", "manager", "finance"],
+      "sample_files": {
+        "xlsx": "exports/excel/StockFlow_Tax_PPN_PPh21_Recap.xlsx"
+      }
+    },
+    {
+      "id": "payroll",
+      "label": "Payroll & BPJS Summary (Masked PII)",
+      "formats": ["xlsx", "docx", "pdf"],
+      "allowed_roles": ["admin", "manager", "hr_payroll", "finance"],
+      "sample_files": {
+        "xlsx": "exports/excel/StockFlow_Payroll_Summary_2026.xlsx"
+      }
+    },
+    {
+      "id": "invoice",
+      "label": "Furniture Retail Sales Invoice (PPN Breakdown)",
+      "formats": ["pdf", "docx"],
+      "allowed_roles": ["admin", "manager", "sales", "finance"],
+      "sample_files": {
+        "pdf": "exports/pdf/StockFlow_Sales_Invoice_INV-2026-001.pdf",
+        "docx": "exports/word/StockFlow_Sales_Invoice_INV-2026-001.docx"
+      }
+    },
+    {
+      "id": "payslip",
+      "label": "Confidential Employee Payslip (IDOR-Protected)",
+      "formats": ["pdf", "docx"],
+      "allowed_roles": ["admin", "manager", "hr_payroll", "self_owner"],
+      "sample_files": {
+        "pdf": "exports/pdf/StockFlow_Employee_Payslip_Sample.pdf",
+        "docx": "exports/word/StockFlow_Employee_Payslip_Sample.docx"
+      }
+    },
+    {
+      "id": "executive_review",
+      "label": "Executive Business Review Presentation Deck",
+      "formats": ["pptx"],
+      "allowed_roles": ["admin", "manager"],
+      "sample_files": {
+        "pptx": "exports/powerpoint/StockFlow_Executive_Business_Review.pptx"
+      }
+    }
+  ]
+}

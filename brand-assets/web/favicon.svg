@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="64" height="64" role="img" aria-label="StockFlow Favicon">
+  <title>StockFlow Favicon</title>
+  <rect x="8" y="8" width="184" height="184" rx="40" fill="#1B4332" />
+  <g transform="translate(20, 20) scale(0.80)">
+    <!-- Upper-Left Interlocking Furniture/Warehouse Timber Bracket -->
+    <path d="M 38,24 H 106 V 54 H 60 Q 54,54 54,60 V 112 H 24 V 38 Q 24,24 38,24 Z" fill="#FAF8F5" />
+    <!-- Lower-Right Symmetric Interlocking Timber Bracket -->
+    <path d="M 162,176 H 94 V 146 H 140 Q 146,146 146,140 V 88 H 176 V 162 Q 176,176 162,176 Z" fill="#FAF8F5" />
+    <!-- Origin Stock / Ledger Unit Cube -->
+    <rect x="24" y="126" width="50" height="50" rx="10" fill="#EAB34B" />
+    <!-- Diagonal Kinetic StockFlow Arrow -->
+    <path d="M 120,24 H 166 Q 176,24 176,34 V 80 H 150 V 68 L 92,126 L 74,108 L 132,50 H 120 Z" fill="#E87A4A" />
+  </g>
+</svg>
