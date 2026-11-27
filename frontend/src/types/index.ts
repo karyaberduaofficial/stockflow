@@ -12,6 +12,7 @@ export type AccountStatus = 'active' | 'pending_approval' | 'suspended';
 
 export interface UserAccount {
   id: number;
+  username?: string;
   name: string;
   email: string;
   role: RoleName;
@@ -21,6 +22,7 @@ export interface UserAccount {
   avatarInitials: string;
   department: string;
   employeeId?: number;
+  passwordHash?: string;
   lastLoginAt: string;
   createdAt: string;
 }

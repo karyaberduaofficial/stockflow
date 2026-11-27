@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   AlertCircle,
   ArrowRight,
   Lock,
   Mail,
-  ShieldCheck,
   Sparkles,
-  UserCheck,
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useStore } from '../context/StoreContext';
@@ -16,25 +14,13 @@ import { RoleName } from '../types';
 import { Modal } from '../components/common/UIPrimitives';
 import { StockFlowApi } from '../services/api';
 
-const DEMO_ROLE_ORDER: RoleName[] = [
-  'admin',
-  'manager',
-  'warehouse',
-  'purchasing',
-  'sales',
-  'finance',
-  'hr_payroll',
-  'guest_pending',
-];
-
 export const LoginPage: React.FC = () => {
-  const { loginWithEmail, loginWithGoogleDemo, loginAsDemoRole, isDemoAuthEnabled, apiOnline, loading } = useAuth();
+  const { loginWithEmail, loginWithGoogleDemo, isDemoAuthEnabled, apiOnline, loading } = useAuth();
   const { users, addPendingUser, pushToast } = useStore();
   const navigate = useNavigate();
 
-  // Only prefill demo credentials when demo auth is explicitly enabled in local development
-  const [email, setEmail] = useState(isDemoAuthEnabled ? 'admin@stockflow.local' : '');
-  const [password, setPassword] = useState(isDemoAuthEnabled ? 'StockFlow2026!' : '');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [googleModalOpen, setGoogleModalOpen] = useState(false);
   const [googleEmail, setGoogleEmail] = useState('guest.baru@example.com');
@@ -81,21 +67,13 @@ export const LoginPage: React.FC = () => {
     if (res.user.role === 'guest_pending') {
       pushToast(
         'warning',
-        'Akun Google Dikarantina',
-        'Akun baru menunggu persetujuan & penetapan role oleh Administrator.'
+        'Akun Google Menunggu Persetujuan',
+        'Akun baru masuk ke antrean Pending di panel Administrator.'
       );
       navigate('/pending-approval', { replace: true });
     } else {
-      pushToast('success', 'Login Google Terverifikasi', `Masuk sebagai ${res.user.name} (${res.user.role}).`);
+      pushToast('success', 'Login Google Terverifikasi', `Masuk sebagai ${res.user.name} (${ROLE_METADATA[res.user.role].shortLabel}).`);
       routeAfterAuth(res.user.role);
-    }
-  };
-
-  const handleQuickRole = (role: RoleName) => {
-    const logged = loginAsDemoRole(role, users);
-    if (logged) {
-      pushToast('info', `Demo Akses: ${ROLE_METADATA[role].label}`, `Aktif sebagai ${logged.name}`);
-      routeAfterAuth(logged.role);
     }
   };
 
@@ -108,7 +86,7 @@ export const LoginPage: React.FC = () => {
           <div className="mt-10 max-w-md sf-animate-enter">
             <span className="inline-flex items-center gap-1.5 rounded-full border border-alabaster/20 bg-alabaster/10 px-3 py-1 text-xs font-semibold text-alabaster">
               <Sparkles className="h-3.5 w-3.5 text-ochre-500" />
-              Enterprise Homeware & Furniture ERP v2.0
+              Enterprise Homeware &amp; Furniture ERP v2.0
             </span>
             <h1 className="mt-5 font-display text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl">
               StockFlow
@@ -183,7 +161,7 @@ export const LoginPage: React.FC = () => {
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="nama@stockflow.local"
+                    placeholder="nama@perusahaan.co.id"
                     className="w-full rounded-xl border border-alabaster-sand bg-alabaster/60 py-2.5 pl-10 pr-3.5 text-sm text-espresso-900 placeholder:text-espresso-400 focus:border-pine-600 focus:bg-white"
                   />
                 </div>
@@ -201,7 +179,7 @@ export const LoginPage: React.FC = () => {
                     required
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    placeholder="••••••••••••"
+                    placeholder="Masukkan kata sandi Anda"
                     className="w-full rounded-xl border border-alabaster-sand bg-alabaster/60 py-2.5 pl-10 pr-3.5 text-sm text-espresso-900 placeholder:text-espresso-400 focus:border-pine-600 focus:bg-white"
                   />
                 </div>
@@ -216,64 +194,28 @@ export const LoginPage: React.FC = () => {
                 <ArrowRight className="h-4 w-4" />
               </button>
             </form>
-          </div>
 
-          {/* Demo Role Switcher — Explicitly Gated by DEV / VITE_ENABLE_DEMO_AUTH */}
-          {isDemoAuthEnabled && (
-            <div className="mt-5 rounded-2xl border border-alabaster-sand bg-white/90 p-5 shadow-card">
-              <div className="flex items-center justify-between gap-2">
-                <p className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-pine-700">
-                  <ShieldCheck className="h-4 w-4" />
-                  Demo Role Access (Mode Pratinjau Dev)
-                </p>
-                <span className="rounded bg-ochre-50 px-2 py-0.5 font-mono text-[10px] font-semibold text-ochre-700 border border-ochre-100">
-                  8 Roles RBAC
-                </span>
-              </div>
-              <p className="mt-1 text-[11px] text-espresso-600">
-                Uji isolasi hak akses antar peran secara instan (nonaktif di build produksi).
-              </p>
-              <div className="mt-3 grid grid-cols-2 gap-2">
-                {DEMO_ROLE_ORDER.map((r) => {
-                  const meta = ROLE_METADATA[r];
-                  return (
-                    <button
-                      key={r}
-                      type="button"
-                      onClick={() => handleQuickRole(r)}
-                      className="flex items-center justify-between rounded-lg border border-alabaster-sand bg-alabaster/70 px-2.5 py-2 text-left text-xs font-semibold text-espresso-800 transition hover:border-pine-600 hover:bg-pine-50"
-                    >
-                      <span className="truncate">{meta.shortLabel}</span>
-                      <UserCheck className="h-3.5 w-3.5 text-pine-600 shrink-0" />
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          )}
+            <p className="mt-5 text-center text-xs text-espresso-600">
+              Belum memiliki akun perusahaan?{' '}
+              <Link to="/register" className="font-bold text-pine-700 hover:text-pine-800 hover:underline">
+                Daftar sekarang
+              </Link>
+            </p>
+          </div>
         </div>
       </section>
 
-      {/* Google OAuth2 Interactive Identity Verification Modal (Dev Demo Only) */}
+      {/* Google OAuth2 Interactive Identity Verification Modal (Dev Only) */}
       {isDemoAuthEnabled && (
         <Modal
           open={googleModalOpen}
           onClose={() => setGoogleModalOpen(false)}
           title="Autentikasi Google OAuth2 — StockFlow"
-          subtitle="Terhubung ke endpoint /api/auth/google/* dengan perlindungan CSRF state & karantina guest_pending."
+          subtitle="Akun Google baru yang belum diprovisi otomatis masuk ke antrean Pending di panel Administrator."
         >
           <div className="space-y-4">
-            <div className="rounded-xl border border-pine-200 bg-pine-50/70 p-3.5 text-xs text-espresso-800">
-              <p className="font-bold text-pine-700">Kebijakan Zero-Trust Google Sign-In:</p>
-              <p className="mt-1">
-                Akun Google yang sudah terdaftar langsung masuk sesuai role-nya. Akun Google baru yang belum diprovisi
-                Admin otomatis dikarantina ke role <code className="font-mono font-bold">guest_pending</code> dengan
-                akses nol ke data perusahaan.
-              </p>
-            </div>
-
             <div className="space-y-2">
-              <p className="text-xs font-semibold text-espresso-700">1. Pilih Akun Google Terdaftar:</p>
+              <p className="text-xs font-semibold text-espresso-700">1. Masuk dengan Akun Google Terdaftar:</p>
               <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                 <button
                   type="button"
@@ -296,7 +238,7 @@ export const LoginPage: React.FC = () => {
 
             <div className="border-t border-alabaster-sand pt-4">
               <p className="text-xs font-semibold text-espresso-700">
-                2. Uji Masuk Akun Google Baru (Otomatis Karantina <code className="font-mono">guest_pending</code>):
+                2. Uji Masuk Akun Google Baru (Masuk Antrean Pending di Admin):
               </p>
               <div className="mt-2.5 grid grid-cols-1 gap-2.5 sm:grid-cols-2">
                 <input
@@ -319,7 +261,7 @@ export const LoginPage: React.FC = () => {
                 onClick={() => handleGoogleSimulate(googleEmail, googleName)}
                 className="mt-3 w-full rounded-xl bg-terracotta-600 py-2.5 text-xs font-bold text-alabaster hover:bg-terracotta-700"
               >
-                Verifikasi Akun Google Baru → Uji Karantina Pending Approval
+                Lanjutkan dengan Akun Google Baru
               </button>
             </div>
           </div>

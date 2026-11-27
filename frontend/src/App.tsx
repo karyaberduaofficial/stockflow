@@ -7,6 +7,7 @@ import { ProtectedRoute } from './components/auth/ProtectedRoute';
 import { ROLE_METADATA } from './config/rbac';
 
 import { LoginPage } from './pages/LoginPage';
+import { RegisterPage } from './pages/RegisterPage';
 import { GoogleCallbackPage } from './pages/GoogleCallbackPage';
 import { PendingApprovalPage } from './pages/PendingApprovalPage';
 import { DashboardPage } from './pages/DashboardPage';
@@ -34,6 +35,7 @@ export const App: React.FC = () => {
         <BrowserRouter>
           <Routes>
             <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
             <Route path="/auth/google/callback" element={<GoogleCallbackPage />} />
             <Route
               path="/pending-approval"

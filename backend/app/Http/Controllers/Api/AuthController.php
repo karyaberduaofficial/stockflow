@@ -114,6 +114,50 @@ class AuthController extends Controller
         ]);
     }
 
+    public function register(Request $request): JsonResponse
+    {
+        $data = $request->validate([
+            'username' => ['required', 'string', 'min:3', 'max:60'],
+            'email' => ['required', 'email', 'max:150', 'unique:users,email'],
+            'role' => ['required', 'string', 'in:admin,manager,warehouse,purchasing,sales,finance,hr_payroll'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+        ]);
+
+        $user = DB::transaction(function () use ($data) {
+            $u = new User();
+            $u->forceFill([
+                'name' => trim($data['username']),
+                'email' => strtolower(trim($data['email'])),
+                'password' => Hash::make($data['password']),
+                'primary_role' => $data['role'],
+                'status' => 'active',
+                'last_login_at' => now(),
+            ])->save();
+
+            $roleId = DB::table('roles')->where('slug', $data['role'])->value('id');
+            if ($roleId) {
+                DB::table('user_roles')->updateOrInsert(
+                    ['user_id' => $u->id, 'role_id' => $roleId],
+                    ['created_at' => now(), 'updated_at' => now()]
+                );
+            }
+
+            return $u;
+        });
+
+        $token = $user->createToken('stockflow-web', [$user->primary_role])->plainTextToken;
+        AuditLogger::log('AUTH_REGISTER_SUCCESS', 'auth', 'info', $user, $request, User::class, $user->id, null, null, [
+            'role' => $user->primary_role,
+        ]);
+
+        return response()->json([
+            'token' => $token,
+            'token_type' => 'Bearer',
+            'user' => $this->formatUser($user),
+            'quarantined' => false,
+        ], 201);
+    }
+
     public function me(Request $request): JsonResponse
     {
         return response()->json([

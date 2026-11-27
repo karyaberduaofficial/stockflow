@@ -28,7 +28,7 @@ const EXPORT_CATALOG: { report: ExportReportType; title: string; description: st
     report: 'payroll',
     title: 'Ringkasan Penggajian & Split BPJS Karyawan/Perusahaan',
     description: 'Bruto, potongan BPJS karyawan, PPh 21 TER, Take Home Pay, serta beban BPJS pemberi kerja.',
-    badge: 'HR & Payroll',
+    badge: 'HR',
   },
   {
     report: 'invoice',

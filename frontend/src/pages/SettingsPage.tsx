@@ -2,20 +2,11 @@ import React, { useState } from 'react';
 import { Building2, Check, ShieldAlert, ShieldCheck, UserCheck, Users } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useStore } from '../context/StoreContext';
-import { RBAC_MATRIX_MODULES, ROLE_METADATA, canAccessRoute } from '../config/rbac';
+import { OFFICIAL_ROLES, RBAC_MATRIX_MODULES, ROLE_METADATA, canAccessRoute } from '../config/rbac';
 import { PageHeader, StatusBadge, TabBar } from '../components/common/UIPrimitives';
 import { RoleName } from '../types';
 
-const ALL_ROLES: RoleName[] = [
-  'admin',
-  'manager',
-  'warehouse',
-  'purchasing',
-  'sales',
-  'finance',
-  'hr_payroll',
-  'guest_pending',
-];
+const ALL_ROLES: RoleName[] = OFFICIAL_ROLES;
 
 export const SettingsPage: React.FC = () => {
   const { user, syncCurrentUserFromList } = useAuth();
@@ -46,16 +37,16 @@ export const SettingsPage: React.FC = () => {
     <div>
       <PageHeader
         eyebrow="Modul 12 • Pusat Pengaturan & Keamanan (Admin Only)"
-        title="Otorisasi Pengguna, Matriks RBAC 8-Role & Audit Keamanan"
-        subtitle="Kelola persetujuan akun Google baru (guest_pending), tetapkan hak akses per peran, konfigurasi entitas perusahaan, dan pantau percobaan akses 403 real-time."
+        title="Otorisasi Pengguna, Antrean Pending & Matriks RBAC 7-Role"
+        subtitle="Kelola antrean akun Pending (terintegrasi di peran Admin), tetapkan hak akses untuk 7 peran resmi (Admin, Manager, Warehouse, Purchasing, Sales/POS, Finance, HR), dan pantau log 403 real-time."
       />
 
       <TabBar
         activeTab={activeTab}
         onChange={setActiveTab}
         tabs={[
-          { id: 'users', label: 'Manajemen Pengguna & Approval Google', count: pendingUsers.length },
-          { id: 'rbac', label: 'Matriks RBAC (8 Roles × 11 Modul)' },
+          { id: 'users', label: 'Pengguna & Antrean Pending (Admin)', count: pendingUsers.length },
+          { id: 'rbac', label: 'Matriks RBAC (7 Roles × 11 Modul)' },
           { id: 'audit', label: 'Log Keamanan & Aktivitas', count: activityLogs.length },
           { id: 'company', label: 'Profil Perusahaan & Sistem' },
         ]}
@@ -141,6 +132,11 @@ export const SettingsPage: React.FC = () => {
                           onChange={(e) => handleAssignRole(u.id, e.target.value as RoleName)}
                           className="rounded-lg border border-alabaster-sand bg-alabaster px-2.5 py-1.5 text-xs font-semibold"
                         >
+                          {u.role === 'guest_pending' && (
+                            <option value="guest_pending" disabled>
+                              Pending (Menunggu Admin)
+                            </option>
+                          )}
                           {ALL_ROLES.map((r) => (
                             <option key={r} value={r}>{ROLE_METADATA[r].label}</option>
                           ))}
@@ -176,7 +172,7 @@ export const SettingsPage: React.FC = () => {
         <div className="overflow-hidden rounded-2xl border border-alabaster-sand bg-white shadow-card">
           <div className="border-b border-alabaster-sand bg-alabaster px-5 py-3.5 text-xs">
             <h3 className="flex items-center gap-2 font-display text-sm font-bold text-espresso-900">
-              <ShieldCheck className="h-4 w-4 text-pine-600" /> Matriks Kontrol Akses Berbasis Peran (Strict 8-Role RBAC)
+              <ShieldCheck className="h-4 w-4 text-pine-600" /> Matriks Kontrol Akses Berbasis Peran (Strict 7-Role RBAC)
             </h3>
             <p className="mt-0.5 text-espresso-500">
               Setiap rute diuji oleh <code className="font-mono">ProtectedRoute</code> di frontend dan middleware Sanctum RBAC di Laravel API.

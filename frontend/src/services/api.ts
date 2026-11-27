@@ -44,6 +44,16 @@ export const StockFlowApi = {
     return apiClient.post('/auth/login', { email, password });
   },
 
+  async register(payload: {
+    username: string;
+    email: string;
+    role: string;
+    password: string;
+    password_confirmation: string;
+  }) {
+    return apiClient.post('/auth/register', payload);
+  },
+
   async me() {
     return apiClient.get('/auth/me');
   },

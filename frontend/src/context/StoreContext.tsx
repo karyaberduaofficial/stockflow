@@ -92,6 +92,7 @@ interface StoreContextValue {
 
   // Domain actions
   addPendingUser: (u: UserAccount) => void;
+  addRegisteredUser: (u: UserAccount) => void;
   approveAndAssignUserRole: (userId: number, role: RoleName, actor: UserAccount) => void;
   updateUserStatus: (userId: number, status: UserAccount['status'], actor: UserAccount) => void;
   updateCompany: (patch: Partial<CompanyProfile>, actor: UserAccount) => void;
@@ -249,7 +250,21 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       module: 'Auth & RBAC',
       target: '/pending-approval',
       severity: 'warning',
-      details: 'Akun Google baru otomatis dikarantina sebagai guest_pending hingga disetujui Admin.',
+      details: 'Akun Google baru otomatis dikarantina di antrean Pending Admin hingga disetujui.',
+    });
+  };
+
+  const addRegisteredUser = (u: UserAccount) => {
+    setUsers((prev) => [u, ...prev.filter((x) => x.email.toLowerCase() !== u.email.toLowerCase())]);
+    logActivity({
+      actorName: u.name,
+      actorEmail: u.email,
+      actorRole: u.role,
+      action: 'AUTH_REGISTER_SUCCESS',
+      module: 'Auth & RBAC',
+      target: u.email,
+      severity: 'info',
+      details: `Akun perusahaan baru terdaftar (${u.username || u.name}) dengan role "${u.role}".`,
     });
   };
 
@@ -1214,6 +1229,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         logActivity,
         logForbiddenAttempt,
         addPendingUser,
+        addRegisteredUser,
         approveAndAssignUserRole,
         updateUserStatus,
         updateCompany,

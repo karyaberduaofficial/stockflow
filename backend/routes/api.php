@@ -19,6 +19,7 @@ Route::get('/healthz', [AuthController::class, 'healthz']);
 // Authentication & Google OAuth2 (strictly rate-limited)
 Route::prefix('auth')->group(function () {
     Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:auth-login');
+    Route::post('/register', [AuthController::class, 'register'])->middleware('throttle:auth-login');
     Route::post('/password/reset-request', [AuthController::class, 'requestPasswordReset'])->middleware('throttle:auth-login');
     Route::post('/password/reset', [AuthController::class, 'resetPassword'])->middleware('throttle:auth-login');
 

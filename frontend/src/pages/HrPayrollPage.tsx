@@ -32,7 +32,7 @@ export const HrPayrollPage: React.FC = () => {
   return (
     <div>
       <PageHeader
-        eyebrow="Modul 09 • SDM, BPJS & Penggajian"
+        eyebrow="Modul 09 • HR, BPJS & Penggajian"
         title="Direktori Karyawan, Split BPJS & Alur Payroll Multi-Level"
         subtitle="Enkripsi PII (NIK/NPWP/Rekening) bagi peran non-HR, pemisahan ketat BPJS Karyawan vs Pemberi Kerja, dan alur persetujuan HR → Manager → Finance."
         actions={<ExportActionBar report="payroll" label="Rekap Payroll" compact />}

@@ -14,6 +14,17 @@ interface AuthContextValue {
     password: string,
     usersList: UserAccount[]
   ) => Promise<{ ok: boolean; user?: UserAccount; error?: string }>;
+  registerWithCompanyEmail: (
+    payload: {
+      username: string;
+      email: string;
+      role: RoleName;
+      password: string;
+      passwordConfirmation: string;
+    },
+    usersList: UserAccount[],
+    onAddUser: (u: UserAccount) => void
+  ) => Promise<{ ok: boolean; user?: UserAccount; error?: string }>;
   verifyBearerToken: (token: string) => Promise<{ ok: boolean; user?: UserAccount; error?: string }>;
   loginWithGoogleDemo: (
     email: string,
@@ -138,6 +149,76 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
+  const registerWithCompanyEmail = async (
+    payload: {
+      username: string;
+      email: string;
+      role: RoleName;
+      password: string;
+      passwordConfirmation: string;
+    },
+    usersList: UserAccount[],
+    onAddUser: (u: UserAccount) => void
+  ): Promise<{ ok: boolean; user?: UserAccount; error?: string }> => {
+    setLoading(true);
+    try {
+      const normalized = payload.email.trim().toLowerCase();
+      if (apiOnline) {
+        try {
+          const res = await StockFlowApi.register({
+            username: payload.username,
+            email: normalized,
+            role: payload.role,
+            password: payload.password,
+            password_confirmation: payload.passwordConfirmation,
+          });
+          if (res.data?.token && res.data?.user) {
+            sessionStorage.setItem('stockflow_token', res.data.token);
+            const mapped = mapApiUser(res.data.user);
+            onAddUser(mapped);
+            persistUser(mapped);
+            return { ok: true, user: mapped };
+          }
+        } catch (err: unknown) {
+          const apiMsg = (err as { response?: { data?: { message?: string } } })?.response?.data?.message;
+          if (apiMsg) return { ok: false, error: apiMsg };
+        }
+      }
+
+      if (usersList.some((u) => u.email.toLowerCase() === normalized)) {
+        return { ok: false, error: 'Email perusahaan sudah terdaftar. Silakan masuk melalui halaman Login.' };
+      }
+
+      const initials = payload.username
+        .split(/[\s._-]+/)
+        .filter(Boolean)
+        .map((w) => w[0])
+        .join('')
+        .slice(0, 2)
+        .toUpperCase();
+
+      const newUser: UserAccount = {
+        id: Date.now(),
+        username: payload.username,
+        name: payload.username,
+        email: normalized,
+        role: payload.role,
+        status: 'active',
+        authProvider: 'local',
+        googleConnected: false,
+        avatarInitials: initials || 'SF',
+        department: 'StockFlow Operations',
+        lastLoginAt: new Date().toISOString().slice(0, 16).replace('T', ' '),
+        createdAt: new Date().toISOString().slice(0, 10),
+      };
+      onAddUser(newUser);
+      persistUser(newUser);
+      return { ok: true, user: newUser };
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const verifyBearerToken = async (
     token: string
   ): Promise<{ ok: boolean; user?: UserAccount; error?: string }> => {
@@ -252,6 +333,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         apiOnline,
         loading,
         loginWithEmail,
+        registerWithCompanyEmail,
         verifyBearerToken,
         loginWithGoogleDemo,
         loginAsDemoRole,

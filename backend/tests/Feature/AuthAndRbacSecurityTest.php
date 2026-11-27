@@ -263,4 +263,55 @@ class AuthAndRbacSecurityTest extends TestCase
             ->assertJsonPath('user.role', 'sales')
             ->assertJsonPath('user.primary_role', 'sales');
     }
+
+    public function test_company_email_registration_supports_official_roles_and_enforces_rbac(): void
+    {
+        // Reject guest_pending self-registration and password mismatch
+        $this->postJson('/api/auth/register', [
+            'username' => 'intruder',
+            'email' => 'intruder@karyaberdua.co.id',
+            'role' => 'guest_pending',
+            'password' => 'StrongPass#2026',
+            'password_confirmation' => 'Mismatch#2026',
+        ])->assertStatus(422);
+
+        // Register valid HR account with company email
+        $res = $this->postJson('/api/auth/register', [
+            'username' => 'siti.hr',
+            'email' => 'siti.hr@karyaberdua.co.id',
+            'role' => 'hr_payroll',
+            'password' => 'StrongPass#2026',
+            'password_confirmation' => 'StrongPass#2026',
+        ]);
+
+        $res->assertStatus(201)
+            ->assertJsonPath('user.name', 'siti.hr')
+            ->assertJsonPath('user.email', 'siti.hr@karyaberdua.co.id')
+            ->assertJsonPath('user.role', 'hr_payroll')
+            ->assertJsonPath('user.primary_role', 'hr_payroll')
+            ->assertJsonPath('quarantined', false);
+
+        $token = (string) $res->json('token');
+        $createdUserId = (int) $res->json('user.id');
+
+        // Confirm pivot user_roles was attached via role slug
+        $hrRoleId = DB::table('roles')->where('slug', 'hr_payroll')->value('id');
+        $this->assertDatabaseHas('user_roles', [
+            'user_id' => $createdUserId,
+            'role_id' => $hrRoleId,
+        ]);
+
+        // Duplicate email rejected
+        $this->postJson('/api/auth/register', [
+            'username' => 'siti.dup',
+            'email' => 'siti.hr@karyaberdua.co.id',
+            'role' => 'warehouse',
+            'password' => 'StrongPass#2026',
+            'password_confirmation' => 'StrongPass#2026',
+        ])->assertStatus(422);
+
+        // Newly registered HR user can access HR endpoints, blocked (403) on Admin endpoints
+        $this->withToken($token)->getJson('/api/hr/employees')->assertOk();
+        $this->withToken($token)->getJson('/api/admin/users')->assertStatus(403);
+    }
 }

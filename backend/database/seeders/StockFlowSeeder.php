@@ -45,7 +45,7 @@ class StockFlowSeeder extends Seeder
             ['slug' => 'purchasing', 'name' => 'Purchasing Staff', 'description' => 'Suppliers, Purchase Orders, Goods Receipts, reorder recommendations.'],
             ['slug' => 'sales', 'name' => 'Sales Staff / Cashier', 'description' => 'Catalog read, POS sales, customers, invoices, sales returns.'],
             ['slug' => 'finance', 'name' => 'Finance & Accounting Staff', 'description' => 'Finance, Cash/Bank, AR/AP, Double-Entry Accounting, Tax, Payroll Disbursement.'],
-            ['slug' => 'hr_payroll', 'name' => 'HR & Payroll Staff', 'description' => 'Employees, unmasked PII, attendance, leaves, BPJS, payroll calculation & payslips.'],
+            ['slug' => 'hr_payroll', 'name' => 'HR', 'description' => 'Employees, unmasked PII, attendance, leaves, BPJS, payroll calculation & payslips.'],
             ['slug' => 'guest_pending', 'name' => 'Guest (Pending Approval)', 'description' => 'Quarantined unknown Google OAuth account with zero business access.'],
         ];
 

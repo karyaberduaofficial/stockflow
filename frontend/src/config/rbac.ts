@@ -152,9 +152,9 @@ export const ROLE_METADATA: Record<RoleName, RoleMetadata> = {
   },
   hr_payroll: {
     role: 'hr_payroll',
-    label: 'HR & Payroll Staff',
-    shortLabel: 'HR & Payroll',
-    description: 'Employee PII directory, attendance & leave, BPJS splits, PPh 21 TER payroll calculation, and payslips.',
+    label: 'HR',
+    shortLabel: 'HR',
+    description: 'Employee directory, attendance & leave, BPJS splits, PPh 21 TER payroll calculation, and payslips.',
     badgeClass: 'bg-espresso-700 text-alabaster',
     defaultRoute: '/hr-payroll',
     allowedRoutes: ['/dashboard', '/master-data', '/hr-payroll', '/tax', '/reports'],
@@ -171,15 +171,25 @@ export const ROLE_METADATA: Record<RoleName, RoleMetadata> = {
   },
   guest_pending: {
     role: 'guest_pending',
-    label: 'Pending Authorization',
+    label: 'Pending (Admin Queue)',
     shortLabel: 'Pending',
-    description: 'Verified Google account quarantined until an Administrator assigns an authorized role.',
+    description: 'Akun menunggu persetujuan yang dikelola di dalam panel Administrator.',
     badgeClass: 'bg-ochre-100 text-ochre-700 border border-ochre-600/30',
     defaultRoute: '/pending-approval',
     allowedRoutes: ['/pending-approval'],
     permissions: [],
   },
 };
+
+export const OFFICIAL_ROLES: RoleName[] = [
+  'admin',
+  'manager',
+  'warehouse',
+  'purchasing',
+  'sales',
+  'finance',
+  'hr_payroll',
+];
 
 export interface NavItemConfig {
   path: string;
@@ -259,7 +269,7 @@ export const NAV_ITEMS: NavItemConfig[] = [
   },
   {
     path: '/hr-payroll',
-    label: 'HR & Penggajian',
+    label: 'HR',
     group: 'SDM & Analitik',
     iconName: 'Users',
     allowedRoles: ['admin', 'manager', 'finance', 'hr_payroll'],
@@ -305,7 +315,7 @@ export const RBAC_MATRIX_MODULES = [
   { key: 'finance', label: 'Keuangan & Kas/Bank', route: '/finance' },
   { key: 'accounting', label: 'Akuntansi Double-Entry', route: '/accounting' },
   { key: 'tax', label: 'Manajemen Pajak', route: '/tax' },
-  { key: 'hr', label: 'HR & Payroll', route: '/hr-payroll' },
+  { key: 'hr', label: 'HR', route: '/hr-payroll' },
   { key: 'reports', label: 'Laporan & Ekspor', route: '/reports' },
   { key: 'settings', label: 'Pengaturan, User & Audit', route: '/settings' },
 ];
