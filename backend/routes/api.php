@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AccountingController;
 use App\Http\Controllers\Api\AdminController;
 use App\Http\Controllers\Api\AnalyticsExportController;
+use App\Http\Controllers\Api\AttendanceController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\FinanceController;
 use App\Http\Controllers\Api\HrPayrollController;
@@ -47,6 +48,13 @@ Route::middleware(['auth:sanctum', 'active', 'throttle:api'])->group(function ()
     // Scoped Own Payslips (IDOR-checked in controller!)
     Route::get('/payroll/payslips', [HrPayrollController::class, 'listPayslips']);
     Route::get('/payroll/payslips/{payroll}', [HrPayrollController::class, 'showPayslip']);
+
+    // Geo-Tagged Photo Attendance (Accessible to ALL 7 active official roles; IDOR-scoped per role!)
+    Route::prefix('attendance')->middleware('role:admin|manager|warehouse|purchasing|sales|finance|hr_payroll')->group(function () {
+        Route::get('/', [AttendanceController::class, 'index']);
+        Route::post('/', [AttendanceController::class, 'store']);
+        Route::get('/{record}/photo', [AttendanceController::class, 'photo']);
+    });
 
     // Document Export Center (RBAC checked per report inside controller!)
     Route::get('/exports/{report}/{format}', [AnalyticsExportController::class, 'export']);

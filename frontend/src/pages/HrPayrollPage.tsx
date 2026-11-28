@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { CheckCircle2, FileText, Lock, ShieldCheck, Users } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Camera, CheckCircle2, FileText, Lock, ShieldCheck, Users } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useStore } from '../context/StoreContext';
 import {
@@ -35,7 +36,17 @@ export const HrPayrollPage: React.FC = () => {
         eyebrow="Modul 09 • HR, BPJS & Penggajian"
         title="Direktori Karyawan, Split BPJS & Alur Payroll Multi-Level"
         subtitle="Enkripsi PII (NIK/NPWP/Rekening) bagi peran non-HR, pemisahan ketat BPJS Karyawan vs Pemberi Kerja, dan alur persetujuan HR → Manager → Finance."
-        actions={<ExportActionBar report="payroll" label="Rekap Payroll" compact />}
+        actions={
+          <div className="flex flex-wrap items-center gap-2">
+            <Link
+              to="/attendance"
+              className="inline-flex items-center gap-1.5 rounded-xl bg-pine-600 px-3.5 py-2 text-xs font-bold text-alabaster shadow-sm hover:bg-pine-700"
+            >
+              <Camera className="h-3.5 w-3.5" /> Form Absensi GPS →
+            </Link>
+            <ExportActionBar report="payroll" label="Rekap Payroll" compact />
+          </div>
+        }
       />
 
       <TabBar

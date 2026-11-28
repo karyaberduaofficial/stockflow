@@ -18,6 +18,7 @@ import { SalesPosPage } from './pages/SalesPosPage';
 import { FinancePage } from './pages/FinancePage';
 import { AccountingPage } from './pages/AccountingPage';
 import { TaxPage } from './pages/TaxPage';
+import { AttendancePage } from './pages/AttendancePage';
 import { HrPayrollPage } from './pages/HrPayrollPage';
 import { ReportsExportsPage } from './pages/ReportsExportsPage';
 import { SettingsPage } from './pages/SettingsPage';
@@ -114,6 +115,14 @@ export const App: React.FC = () => {
                 element={
                   <ProtectedRoute allowedRoles={['admin', 'manager', 'finance', 'hr_payroll']}>
                     <TaxPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/attendance"
+                element={
+                  <ProtectedRoute allowedRoles={['admin', 'manager', 'warehouse', 'purchasing', 'sales', 'finance', 'hr_payroll']}>
+                    <AttendancePage />
                   </ProtectedRoute>
                 }
               />

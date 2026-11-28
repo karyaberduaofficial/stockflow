@@ -3,6 +3,7 @@ import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import {
   Barcode,
   BookOpen,
+  Camera,
   Database,
   FileSpreadsheet,
   Landmark,
@@ -35,6 +36,7 @@ const ICON_MAP = {
   Wallet,
   BookOpen,
   Landmark,
+  Camera,
   Users,
   FileSpreadsheet,
   ShieldCheck,

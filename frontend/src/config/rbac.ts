@@ -28,6 +28,7 @@ export const ROLE_METADATA: Record<RoleName, RoleMetadata> = {
       '/finance',
       '/accounting',
       '/tax',
+      '/attendance',
       '/hr-payroll',
       '/reports',
       '/settings',
@@ -50,6 +51,7 @@ export const ROLE_METADATA: Record<RoleName, RoleMetadata> = {
       '/finance',
       '/accounting',
       '/tax',
+      '/attendance',
       '/hr-payroll',
       '/reports',
     ],
@@ -76,7 +78,7 @@ export const ROLE_METADATA: Record<RoleName, RoleMetadata> = {
     description: 'Inventory control, stock in/out, stock opname, adjustment requests, inter-warehouse transfers, barcode scanning.',
     badgeClass: 'bg-olive-600 text-alabaster',
     defaultRoute: '/inventory',
-    allowedRoutes: ['/dashboard', '/master-data', '/inventory', '/reports'],
+    allowedRoutes: ['/dashboard', '/master-data', '/inventory', '/attendance', '/reports'],
     permissions: [
       'dashboard.view',
       'master.products.read',
@@ -93,7 +95,7 @@ export const ROLE_METADATA: Record<RoleName, RoleMetadata> = {
     description: 'Supplier sourcing, Purchase Order lifecycle, Goods Receiving, and supplier scorecard evaluation.',
     badgeClass: 'bg-ochre-600 text-alabaster',
     defaultRoute: '/procurement',
-    allowedRoutes: ['/dashboard', '/master-data', '/inventory', '/procurement', '/reports'],
+    allowedRoutes: ['/dashboard', '/master-data', '/inventory', '/procurement', '/attendance', '/reports'],
     permissions: [
       'dashboard.view',
       'master.suppliers.write',
@@ -110,7 +112,7 @@ export const ROLE_METADATA: Record<RoleName, RoleMetadata> = {
     description: 'Retail showroom POS cashier, barcode checkout, customer orders, invoices, and sales returns.',
     badgeClass: 'bg-burgundy-600 text-alabaster',
     defaultRoute: '/sales',
-    allowedRoutes: ['/dashboard', '/master-data', '/inventory', '/sales', '/reports'],
+    allowedRoutes: ['/dashboard', '/master-data', '/inventory', '/sales', '/attendance', '/reports'],
     permissions: [
       'dashboard.view',
       'master.customers.write',
@@ -134,6 +136,7 @@ export const ROLE_METADATA: Record<RoleName, RoleMetadata> = {
       '/finance',
       '/accounting',
       '/tax',
+      '/attendance',
       '/hr-payroll',
       '/reports',
     ],
@@ -157,7 +160,7 @@ export const ROLE_METADATA: Record<RoleName, RoleMetadata> = {
     description: 'Employee directory, attendance & leave, BPJS splits, PPh 21 TER payroll calculation, and payslips.',
     badgeClass: 'bg-espresso-700 text-alabaster',
     defaultRoute: '/hr-payroll',
-    allowedRoutes: ['/dashboard', '/master-data', '/hr-payroll', '/tax', '/reports'],
+    allowedRoutes: ['/dashboard', '/master-data', '/attendance', '/hr-payroll', '/tax', '/reports'],
     permissions: [
       'dashboard.view',
       'master.employees.write',
@@ -204,6 +207,7 @@ export interface NavItemConfig {
     | 'Wallet'
     | 'BookOpen'
     | 'Landmark'
+    | 'Camera'
     | 'Users'
     | 'FileSpreadsheet'
     | 'ShieldCheck';
@@ -268,6 +272,13 @@ export const NAV_ITEMS: NavItemConfig[] = [
     allowedRoles: ['admin', 'manager', 'finance', 'hr_payroll'],
   },
   {
+    path: '/attendance',
+    label: 'Absensi & Kehadiran',
+    group: 'SDM & Analitik',
+    iconName: 'Camera',
+    allowedRoles: ['admin', 'manager', 'warehouse', 'purchasing', 'sales', 'finance', 'hr_payroll'],
+  },
+  {
     path: '/hr-payroll',
     label: 'HR',
     group: 'SDM & Analitik',
@@ -315,6 +326,7 @@ export const RBAC_MATRIX_MODULES = [
   { key: 'finance', label: 'Keuangan & Kas/Bank', route: '/finance' },
   { key: 'accounting', label: 'Akuntansi Double-Entry', route: '/accounting' },
   { key: 'tax', label: 'Manajemen Pajak', route: '/tax' },
+  { key: 'attendance', label: 'Absensi & Geo-Foto', route: '/attendance' },
   { key: 'hr', label: 'HR', route: '/hr-payroll' },
   { key: 'reports', label: 'Laporan & Ekspor', route: '/reports' },
   { key: 'settings', label: 'Pengaturan, User & Audit', route: '/settings' },

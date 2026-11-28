@@ -102,4 +102,30 @@ export const StockFlowApi = {
       return null;
     }
   },
+
+  async listAttendance(params?: { role?: string; date?: string }) {
+    return apiClient.get('/attendance', { params });
+  },
+
+  async submitAttendance(payload: {
+    full_name: string;
+    employee_code: string;
+    role_slug: string;
+    department: string;
+    work_location: string;
+    shift: string;
+    attendance_type: 'check_in' | 'check_out';
+    status: 'present' | 'late' | 'field_duty' | 'leave' | 'sick';
+    attendance_date: string;
+    attendance_time: string;
+    latitude: number;
+    longitude: number;
+    accuracy_m: number | null;
+    location_address: string;
+    captured_at: string;
+    photo_data_url: string;
+    notes?: string;
+  }) {
+    return apiClient.post('/attendance', payload, { timeout: 10000 });
+  },
 };

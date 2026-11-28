@@ -2,7 +2,7 @@
 
 $frontendOrigins = array_values(array_filter(array_map(
     static fn (string $origin): string => rtrim(trim($origin), '/'),
-    explode(',', (string) env('FRONTEND_URL', 'http://localhost:5173'))
+    explode(',', (string) env('FRONTEND_URL', 'http://127.0.0.1:5175,http://localhost:5175'))
 )));
 
 return [
@@ -10,7 +10,7 @@ return [
 
     'allowed_methods' => ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
 
-    'allowed_origins' => $frontendOrigins ?: ['http://localhost:5173'],
+    'allowed_origins' => $frontendOrigins ?: ['http://127.0.0.1:5175', 'http://localhost:5175'],
 
     'allowed_origins_patterns' => [],
 

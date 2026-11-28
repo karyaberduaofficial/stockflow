@@ -46,7 +46,7 @@ export const SettingsPage: React.FC = () => {
         onChange={setActiveTab}
         tabs={[
           { id: 'users', label: 'Pengguna & Antrean Pending (Admin)', count: pendingUsers.length },
-          { id: 'rbac', label: 'Matriks RBAC (7 Roles × 11 Modul)' },
+          { id: 'rbac', label: 'Matriks RBAC (7 Roles × 12 Modul)' },
           { id: 'audit', label: 'Log Keamanan & Aktivitas', count: activityLogs.length },
           { id: 'company', label: 'Profil Perusahaan & Sistem' },
         ]}

@@ -29,6 +29,7 @@ import {
   AccountCOA,
   AccountingPeriod,
   ActivityLog,
+  AttendanceRecordItem,
   Brand,
   CashLedgerEntry,
   Category,
@@ -83,6 +84,7 @@ interface StoreContextValue {
   taxTransactions: TaxTransaction[];
   employees: Employee[];
   payrolls: PayrollRecord[];
+  attendanceRecords: AttendanceRecordItem[];
   activityLogs: ActivityLog[];
   toasts: ToastMessage[];
   pushToast: (type: ToastMessage['type'], title: string, message?: string) => void;
@@ -157,7 +159,113 @@ interface StoreContextValue {
   markTaxPaid: (taxTxId: number, actor: UserAccount) => void;
 
   advancePayrollStatus: (payrollId: number, nextStatus: PayrollStatus, actor: UserAccount) => void;
+  submitAttendanceRecord: (
+    payload: Omit<AttendanceRecordItem, 'id' | 'userId'>,
+    actor: UserAccount
+  ) => Promise<AttendanceRecordItem>;
 }
+
+function createSampleGeoBadgeSvg(name: string, role: string, coords: string, address: string, time: string): string {
+  const safe = (s: string) => s.replace(/[<>&"]/g, '');
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="800" height="480" viewBox="0 0 800 480">
+    <rect width="800" height="480" fill="#292524"/>
+    <circle cx="400" cy="170" r="64" fill="#1B4332"/>
+    <circle cx="400" cy="148" r="24" fill="#FAF8F5"/>
+    <path d="M354 218c6-26 24-38 46-38s40 12 46 38" fill="#FAF8F5"/>
+    <rect x="28" y="26" width="330" height="34" rx="17" fill="#1B4332" stroke="#EAB34B" stroke-width="1.5"/>
+    <text x="46" y="48" fill="#FAF8F5" font-family="sans-serif" font-size="13" font-weight="700">STOCKFLOW GEO-VERIFIED • ABSEN MASUK</text>
+    <rect x="28" y="330" width="744" height="124" rx="14" fill="#1C1917" fill-opacity="0.92"/>
+    <rect x="28" y="330" width="7" height="124" rx="3" fill="#EAB34B"/>
+    <text x="50" y="362" fill="#FAF8F5" font-family="sans-serif" font-size="18" font-weight="800">${safe(name)} • ${safe(role)}</text>
+    <text x="50" y="390" fill="#EAB34B" font-family="monospace" font-size="13" font-weight="700">GPS: ${safe(coords)}  |  ${safe(time)}</text>
+    <text x="50" y="420" fill="#E7E0D6" font-family="sans-serif" font-size="13">Lokasi: ${safe(address)}</text>
+  </svg>`;
+  return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+}
+
+const INITIAL_ATTENDANCE_RECORDS: AttendanceRecordItem[] = [
+  {
+    id: 1,
+    userId: 3,
+    fullName: 'Budi Santoso',
+    employeeCode: 'EMP-2025-002',
+    role: 'warehouse',
+    department: 'Warehouse & Logistics',
+    workLocation: 'Gudang Bekasi (WH-BKS)',
+    shift: 'Shift Pagi (08:00 – 17:00 WIB)',
+    attendanceType: 'check_in',
+    status: 'present',
+    attendanceDate: '2026-11-28',
+    attendanceTime: '07:56:14',
+    latitude: -6.23827,
+    longitude: 106.975573,
+    accuracyM: 11,
+    locationAddress: 'Jl. Industri Raya Blok B-12, Bekasi Selatan, Kota Bekasi, Jawa Barat 17141',
+    capturedAt: '28 Nov 2026 · 07:56:14 WIB',
+    photoDataUrl: createSampleGeoBadgeSvg(
+      'Budi Santoso',
+      'Warehouse (EMP-2025-002)',
+      '-6.238270, 106.975573 (±11m)',
+      'Jl. Industri Raya Blok B-12, Bekasi Selatan, Jawa Barat',
+      '28 Nov 2026 · 07:56:14 WIB'
+    ),
+    notes: 'Persiapan stock opname dan bongkar muat PO Jepara.',
+  },
+  {
+    id: 2,
+    userId: 5,
+    fullName: 'Dimas Ramadhan',
+    employeeCode: 'EMP-2025-004',
+    role: 'sales',
+    department: 'Showroom Sales & POS',
+    workLocation: 'Showroom Kemang (SH-JKS)',
+    shift: 'Shift Showroom (10:00 – 21:00 WIB)',
+    attendanceType: 'check_in',
+    status: 'present',
+    attendanceDate: '2026-11-28',
+    attendanceTime: '09:48:05',
+    latitude: -6.260719,
+    longitude: 106.813492,
+    accuracyM: 9,
+    locationAddress: 'Jl. Kemang Raya No. 88, Bangka, Mampang Prapatan, Jakarta Selatan 12730',
+    capturedAt: '28 Nov 2026 · 09:48:05 WIB',
+    photoDataUrl: createSampleGeoBadgeSvg(
+      'Dimas Ramadhan',
+      'Sales / POS (EMP-2025-004)',
+      '-6.260719, 106.813492 (±9m)',
+      'Jl. Kemang Raya No. 88, Mampang Prapatan, Jakarta Selatan',
+      '28 Nov 2026 · 09:48:05 WIB'
+    ),
+    notes: 'Pembukaan kasir showroom Kemang.',
+  },
+  {
+    id: 3,
+    userId: 7,
+    fullName: 'Ayu Lestari',
+    employeeCode: 'EMP-2025-005',
+    role: 'hr_payroll',
+    department: 'HR',
+    workLocation: 'Kantor Pusat PT Karya Berdua',
+    shift: 'Shift Pagi (08:00 – 17:00 WIB)',
+    attendanceType: 'check_in',
+    status: 'present',
+    attendanceDate: '2026-11-28',
+    attendanceTime: '08:01:30',
+    latitude: -6.260719,
+    longitude: 106.813492,
+    accuracyM: 12,
+    locationAddress: 'Jl. Kemang Raya No. 88 Lt. 3, Jakarta Selatan, DKI Jakarta 12730',
+    capturedAt: '28 Nov 2026 · 08:01:30 WIB',
+    photoDataUrl: createSampleGeoBadgeSvg(
+      'Ayu Lestari',
+      'HR (EMP-2025-005)',
+      '-6.260719, 106.813492 (±12m)',
+      'Jl. Kemang Raya No. 88 Lt. 3, Jakarta Selatan, DKI Jakarta',
+      '28 Nov 2026 · 08:01:30 WIB'
+    ),
+    notes: 'Rekonsiliasi absensi & persiapan penggajian bulanan.',
+  },
+];
 
 const StoreContext = createContext<StoreContextValue | null>(null);
 
@@ -185,6 +293,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [taxTransactions, setTaxTransactions] = useState<TaxTransaction[]>(INITIAL_TAX_TRANSACTIONS);
   const [employees] = useState<Employee[]>(INITIAL_EMPLOYEES);
   const [payrolls, setPayrolls] = useState<PayrollRecord[]>(INITIAL_PAYROLLS);
+  const [attendanceRecords, setAttendanceRecords] = useState<AttendanceRecordItem[]>(INITIAL_ATTENDANCE_RECORDS);
   const [activityLogs, setActivityLogs] = useState<ActivityLog[]>(INITIAL_ACTIVITY_LOGS);
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
 
@@ -1196,6 +1305,63 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     pushToast('success', 'Alur Payroll Diperbarui', `${rec.employeeName} → ${nextStatus.replace('_', ' ').toUpperCase()}`);
   };
 
+  const submitAttendanceRecord = async (
+    payload: Omit<AttendanceRecordItem, 'id' | 'userId'>,
+    actor: UserAccount
+  ): Promise<AttendanceRecordItem> => {
+    let savedId = Date.now();
+    try {
+      const apiRes = await StockFlowApi.submitAttendance({
+        full_name: payload.fullName,
+        employee_code: payload.employeeCode,
+        role_slug: payload.role,
+        department: payload.department,
+        work_location: payload.workLocation,
+        shift: payload.shift,
+        attendance_type: payload.attendanceType,
+        status: payload.status,
+        attendance_date: payload.attendanceDate,
+        attendance_time: payload.attendanceTime,
+        latitude: payload.latitude,
+        longitude: payload.longitude,
+        accuracy_m: payload.accuracyM,
+        location_address: payload.locationAddress,
+        captured_at: payload.capturedAt,
+        photo_data_url: payload.photoDataUrl,
+        notes: payload.notes,
+      });
+      if (apiRes.data?.data?.id) {
+        savedId = Number(apiRes.data.data.id);
+      }
+    } catch {
+      // Offline / local fallback persists directly in StoreContext
+    }
+
+    const created: AttendanceRecordItem = {
+      ...payload,
+      id: savedId,
+      userId: actor.id,
+    };
+
+    setAttendanceRecords((prev) => [created, ...prev]);
+    logActivity({
+      actorName: actor.name,
+      actorEmail: actor.email,
+      actorRole: actor.role,
+      action: 'ATTENDANCE_RECORDED',
+      module: 'Absensi & Kehadiran',
+      target: `${payload.attendanceType.toUpperCase()} (${payload.role})`,
+      severity: 'info',
+      details: `${payload.fullName} tercatat ${payload.attendanceType === 'check_in' ? 'Absen Masuk' : 'Absen Pulang'} pada ${payload.capturedAt} di ${payload.locationAddress}.`,
+    });
+    pushToast(
+      'success',
+      'Absensi Ber-GPS Berhasil Disimpan',
+      `${payload.fullName} (${payload.attendanceType === 'check_in' ? 'Masuk' : 'Pulang'}) terverifikasi di lokasi.`
+    );
+    return created;
+  };
+
   return (
     <StoreContext.Provider
       value={{
@@ -1222,6 +1388,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         taxTransactions,
         employees,
         payrolls,
+        attendanceRecords,
         activityLogs,
         toasts,
         pushToast,
@@ -1252,6 +1419,7 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         togglePpnElevenTwelfths,
         markTaxPaid,
         advancePayrollStatus,
+        submitAttendanceRecord,
       }}
     >
       {children}

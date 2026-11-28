@@ -314,4 +314,80 @@ class AuthAndRbacSecurityTest extends TestCase
         $this->withToken($token)->getJson('/api/hr/employees')->assertOk();
         $this->withToken($token)->getJson('/api/admin/users')->assertStatus(403);
     }
+
+    public function test_attendance_with_geo_tagged_photo_and_idor_scoping_works_for_official_roles(): void
+    {
+        $warehouse = User::where('primary_role', 'warehouse')->firstOrFail();
+        $sales = User::where('primary_role', 'sales')->firstOrFail();
+        $hr = User::where('primary_role', 'hr_payroll')->firstOrFail();
+
+        // 1x1 valid PNG pixel encoded as data URL (passes getimagesizefromstring!)
+        $validPng = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=';
+
+        Sanctum::actingAs($warehouse);
+
+        // Reject SVG/non-raster payloads (anti-XSS upload protection)
+        $this->postJson('/api/attendance', [
+            'full_name' => 'Budi Santoso',
+            'employee_code' => 'EMP-002',
+            'role_slug' => 'warehouse',
+            'department' => 'Warehouse & Logistics',
+            'work_location' => 'Gudang Bekasi (WH-BKS)',
+            'shift' => 'Shift Pagi (08:00 - 17:00)',
+            'attendance_type' => 'check_in',
+            'status' => 'present',
+            'attendance_date' => '2026-11-28',
+            'attendance_time' => '08:02:15',
+            'latitude' => -6.238270,
+            'longitude' => 106.975573,
+            'accuracy_m' => 12.5,
+            'location_address' => 'Jl. Industri Raya Blok B-12, Bekasi Selatan, Jawa Barat',
+            'captured_at' => '2026-11-28 08:02:15 WIB',
+            'photo_data_url' => 'data:image/svg+xml;base64,PHN2Zy8+',
+        ])->assertStatus(422);
+
+        // Valid geo-tagged photo submission succeeds
+        $created = $this->postJson('/api/attendance', [
+            'full_name' => 'Budi Santoso',
+            'employee_code' => 'EMP-002',
+            'role_slug' => 'warehouse',
+            'department' => 'Warehouse & Logistics',
+            'work_location' => 'Gudang Bekasi (WH-BKS)',
+            'shift' => 'Shift Pagi (08:00 - 17:00)',
+            'attendance_type' => 'check_in',
+            'status' => 'present',
+            'attendance_date' => '2026-11-28',
+            'attendance_time' => '08:02:15',
+            'latitude' => -6.238270,
+            'longitude' => 106.975573,
+            'accuracy_m' => 12.5,
+            'location_address' => 'Jl. Industri Raya Blok B-12, Bekasi Selatan, Jawa Barat',
+            'captured_at' => '2026-11-28 08:02:15 WIB',
+            'photo_data_url' => $validPng,
+            'notes' => 'Absen masuk shift pagi gudang utama.',
+        ]);
+
+        $created->assertStatus(201)
+            ->assertJsonPath('data.full_name', 'Budi Santoso')
+            ->assertJsonPath('data.role_slug', 'warehouse')
+            ->assertJsonPath('data.location_address', 'Jl. Industri Raya Blok B-12, Bekasi Selatan, Jawa Barat');
+
+        $recordId = (int) $created->json('data.id');
+
+        // Own photo accessible -> 200 OK
+        $this->get("/api/attendance/{$recordId}/photo")->assertOk();
+
+        // Sales (another non-HR/Admin user) CANNOT view Warehouse's attendance photo (403 IDOR)
+        Sanctum::actingAs($sales);
+        $this->getJson("/api/attendance/{$recordId}/photo")
+            ->assertStatus(403)
+            ->assertJsonPath('error_code', 'IDOR_FORBIDDEN');
+
+        // HR CAN view all records and authorized photo -> 200 OK
+        Sanctum::actingAs($hr);
+        $this->getJson('/api/attendance')
+            ->assertOk()
+            ->assertJsonPath('scope', 'all');
+        $this->get("/api/attendance/{$recordId}/photo")->assertOk();
+    }
 }

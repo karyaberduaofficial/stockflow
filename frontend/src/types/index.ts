@@ -387,3 +387,28 @@ export interface ToastMessage {
   title: string;
   message?: string;
 }
+
+export type AttendanceType = 'check_in' | 'check_out';
+export type AttendanceStatus = 'present' | 'late' | 'field_duty' | 'leave' | 'sick';
+
+export interface AttendanceRecordItem {
+  id: number;
+  userId: number;
+  fullName: string;
+  employeeCode: string;
+  role: RoleName;
+  department: string;
+  workLocation: string;
+  shift: string;
+  attendanceType: AttendanceType;
+  status: AttendanceStatus;
+  attendanceDate: string;
+  attendanceTime: string;
+  latitude: number;
+  longitude: number;
+  accuracyM: number | null;
+  locationAddress: string;
+  capturedAt: string;
+  photoDataUrl: string;
+  notes?: string;
+}
